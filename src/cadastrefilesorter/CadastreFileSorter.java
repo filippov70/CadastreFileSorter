@@ -20,6 +20,12 @@ import org.xml.sax.SAXException;
  *
  * @author filippov
  * 
+ * Программа анализирует XML-файлы Росреестра в указанной директории выявляя
+ * используемые системы координат и создаёт на этом же уровне столько директорий
+ * сколько найдено систем координат. Далее в них копируются XML-файлы с нужными
+ * системами координат. Далее можно использовать LandProcessor с функцией объединения
+ * выходных шейп-файлов в один.
+ * 
  */
 public class CadastreFileSorter {
 
@@ -69,10 +75,12 @@ public class CadastreFileSorter {
                                 coordSys + File.separator + file.getName());
                         if (Files.exists(targetDir)) {
                             Files.copy(file.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+                            logger.log(Level.INFO, "output file created: {0}", target.toString());
                         } else {
                             Files.createDirectory(targetDir);
-                            logger.log(Level.INFO, "output directory created: {0}", target.toString());
+                            logger.log(Level.INFO, "output directory created: {0}", targetDir.toString());
                             Files.copy(file.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+                            logger.log(Level.INFO, "output file created: {0}", target.toString());
                         }
                     }
                 }
